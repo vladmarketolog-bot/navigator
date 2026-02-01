@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление Профилями | Навигатор Талантов</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .profile-age {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .profile-date {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        .close-modal:hover {
+            color: #ef4444;
+        }
+
+        .profile-detail {
+            margin-bottom: 20px;
+        }
+
+        .profile-detail h3 {
+            font-size: 1.1rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .profile-detail p {
+            color: #475569;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+
+            th,
+            td {
+                padding: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-database"></i> Управление Профилями</h1>
+            <p>Просмотр и управление сохраненными профилями детей</p>
+        </div>
+
+        <div class="actions">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Поиск по имени ребенка...">
+                <i class="fas fa-search"></i>
+            </div>
+            <button class="btn btn-primary" onclick="location.href='assessment.html'">
+                <i class="fas fa-plus"></i> Новый Профиль
+            </button>
+            <button class="btn btn-secondary" onclick="location.href='index.html'">
+                <i class="fas fa-home"></i> На Главную
+            </button>
+        </div>
+
+        <div class="table-container">
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner"></i>
+                <p>Загрузка профилей...</p>
+            </div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-folder-open"></i>
+                <h3>Нет сохраненных профилей</h3>
+                <p>Создайте первый профиль, нажав кнопку "Новый Профиль"</p>
+            </div>
+
+            <table id="profilesTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Имя Ребенка</th>
+                        <th>Возраст</th>
+                        <th>Дата Создания</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="profilesBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for profile details -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Детали Профиля</h2>
+                <button class="close-modal" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalBody"></div>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="editProfile()">
+                    <i class="fas fa-edit"></i> Редактировать
+                </button>
+                <button class="btn btn-secondary" onclick="downloadProfile()">
+                    <i class="fas fa-download"></i> Скачать JSON
+                </button>
+                <button class="btn btn-danger" onclick="deleteCurrentProfile()">
+                    <i class="fas fa-trash"></i> Удалить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let profiles = [];
+        let currentProfile = null;
+
+        // Load profiles on page load
+        window.addEventListener('load', loadProfiles);
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function (e) {
+            const search = e.target.value.toLowerCase();
+            const filtered = profiles.filter(p =>
+                p.child_name.toLowerCase().includes(search)
+            );
+            renderProfiles(filtered);
+        });
+
+        async function loadProfiles() {
+            try {
+                const response = await fetch('api/profiles.php?action=list');
+                const data = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (data.success && data.profiles.length > 0) {
+                    profiles = data.profiles;
+                    renderProfiles(profiles);
+                } else {
+                    document.getElementById('emptyState').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+                document.getElementById('loading').innerHTML =
+                    '<p style="color: #ef4444;">Ошибка загрузки профилей</p>';
+            }
+        }
+
+        function renderProfiles(profilesList) {
+            const tbody = document.getElementById('profilesBody');
+            tbody.innerHTML = '';
+
+            if (profilesList.length === 0) {
+                document.getElementById('profilesTable').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('profilesTable').style.display = 'table';
+            document.getElementById('emptyState').style.display = 'none';
+
+            profilesList.forEach(profile => {
+                const tr = document.createElement('tr');
+                const date = new Date(profile.created_at).toLocaleDateString('ru-RU', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                tr.innerHTML = `
+                    <td>${profile.id}</td>
+                    <td>
+                        <div class="profile-name">${escapeHtml(profile.child_name)}</div>
+                    </td>
+                    <td><span class="profile-age">${profile.child_age || 'Не указано'} лет</span></td>
+                    <td><span class="profile-date">${date}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-small" onclick="viewProfile(${profile.id})">
+                                <i class="fas fa-eye"></i> Просмотр
+                            </button>
+                            <button class="btn btn-secondary btn-small" onclick="loadProfileToForm(${profile.id})">
+                                <i class="fas fa-edit"></i> Редактировать
+                            </button>
+                            <button class="btn btn-danger btn-small" onclick="deleteProfile(${profile.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function viewProfile(id) {
+            try {
+                const response = await fetch(`api/profiles.php?action=get&id=${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    currentProfile = data.profile;
+                    displayProfileDetails(data.profile);
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                alert('Ошибка загрузки профиля');
+            }
+        }
+
+        function displayProfileDetails(profile) {
+            const modalBody = document.getElementById('modalBody');
+            const data = profile.profile_data;
+
+            let html = `
+                <div class="profile-detail">
+                    <h3><i class="fas fa-user"></i> Базовая Информация</h3>
+                    <p><strong>Имя:</strong> ${escapeHtml(data.childName || 'Не указано')}</p>
+                    <p><strong>Возраст:</strong> ${data.childAge || 'Не указано'} лет</p>
+                    <p><strong>Класс:</strong> ${escapeHtml(data.childGrade || 'Не указано')}</p>
+                    <p><strong>Пол:</strong> ${escapeHtml(data.childGender || 'Не указано')}</p>
+                    <p><strong>Город:</strong> ${escapeHtml(data.city || 'Не указано')}</p>
+                </div>
+                
+                <div class="profile-detail">
+                    <h3><i class="fas fa-graduation-cap"></i> Академические Показатели</h3>
+                    <p><strong>Любимые предметы:</strong> ${escapeHtml(data.favoriteSubjects || 'Не указано')}</p>
+                    <p><strong>Стиль обучения:</strong> ${Array.isArray(data.learningStyle) ? data.learningStyle.join(', ') : 'Не указано'}</p>
+                </div>
+                
+                <div class="profile-detail">
+                    <h3><i class="fas fa-palette"></i> Интересы</h3>
+                    <p><strong>Хобби:</strong> ${escapeHtml(data.hobbies || 'Не указано')}</p>
+                    <p><strong>Цифровые навыки:</strong> ${escapeHtml(data.digitalSkills || 'Не указано')}</p>
+                </div>
+                
+                <div class="profile-detail">
+                    <h3><i class="fas fa-trophy"></i> Мотивация</h3>
+                    <p><strong>Карьерные мечты:</strong> ${escapeHtml(data.careerDreams || 'Не указано')}</p>
+                </div>
+            `;
+
+            modalBody.innerHTML = html;
+            document.getElementById('profileModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('profileModal').classList.remove('active');
+            currentProfile = null;
+        }
+
+        function editProfile() {
+            if (currentProfile) {
+                loadProfileToForm(currentProfile.id);
+            }
+        }
+
+        function loadProfileToForm(id) {
+            // Save profile ID to localStorage for assessment.html to load
+            localStorage.setItem('loadProfileId', id);
+            window.location.href = 'assessment.html';
+        }
+
+        function downloadProfile() {
+            if (currentProfile) {
+                const dataStr = JSON.stringify(currentProfile, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `profile_${currentProfile.child_name}_${currentProfile.id}.json`;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        async function deleteProfile(id) {
+            if (!confirm('Вы уверены, что хотите удалить этот профиль?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`api/profiles.php?action=delete&id=${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Профиль успешно удален');
+                    loadProfiles();
+                    closeModal();
+                } else {
+                    alert('Ошибка удаления: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error deleting profile:', error);
+                alert('Ошибка удаления профиля');
+            }
+        }
+
+        function deleteCurrentProfile() {
+            if (currentProfile) {
+                deleteProfile(currentProfile.id);
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Close modal on outside click
+        document.getElementById('profileModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

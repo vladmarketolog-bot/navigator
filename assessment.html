@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полный Опросник | Навигатор Талантов</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            /* Slate 900 */
+            background-image:
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            /* Slate 200 */
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                padding: 0 24px;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #1e293b;
+            border-radius: 50px;
+            height: 6px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            position: sticky;
+            top: 72px;
+            z-index: 40;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid #334155;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #a855f7);
+            border-radius: 50px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+
+        .step-indicator {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+            font-weight: 500;
+            font-family: monospace;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            /* Slate 800/70 */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        @media (min-width: 768px) {
+            .card {
+                padding: 40px;
+            }
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Typography */
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            line-height: 1.3;
+        }
+
+        @media (min-width: 768px) {
+            .step-title {
+                font-size: 2rem;
+            }
+        }
+
+        .step-title i {
+            color: #60a5fa;
+            filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.4));
+        }
+
+        .step-description {
+            color: #94a3b8;
+            margin-bottom: 32px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .form-label .required {
+            color: #f472b6;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            min-height: 52px;
+            padding: 14px 18px;
+            border: 2px solid #334155;
+            border-radius: 14px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            background: #0f172a;
+            color: white;
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: #475569;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1);
+            background: #1e293b;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        /* Radio and Checkbox Options (Cards) */
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            min-height: 60px;
+            padding: 16px 20px;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #0f172a;
+            color: #cbd5e1;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            border-color: #60a5fa;
+            background: #1e293b;
+            transform: translateX(4px);
+        }
+
+        .radio-option input,
+        .checkbox-option input {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #475569;
+            border-radius: 50%;
+            margin-right: 16px;
+            position: relative;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .checkbox-option input {
+            border-radius: 6px;
+        }
+
+        .radio-option input:checked,
+        .checkbox-option input:checked {
+            border-color: #60a5fa;
+            background-color: #60a5fa;
+            box-shadow: 0 0 10px rgba(96, 165, 250, 0.4);
+        }
+
+        .radio-option.selected,
+        .checkbox-option.selected {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        @media (min-width: 640px) {
+            .button-group {
+                flex-direction: row;
+            }
+        }
+
+        .btn {
+            width: 100%;
+            min-height: 52px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        @media (min-width: 640px) {
+            .btn {
+                width: auto;
+                flex: 1;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563ea, #7c3aed);
+            color: white;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #334155;
+            color: white;
+        }
+
+        /* Results Screen */
+        .result-container {
+            display: none;
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .prompt-box {
+            background: #020617;
+            color: #a5b4fc;
+            padding: 24px;
+            border-radius: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 24px;
+            white-space: pre-wrap;
+            border: 1px solid #1e293b;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 640px) {
+            .action-buttons {
+                flex-direction: row;
+            }
+        }
+
+        .action-buttons .btn {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .success-message {
+            background: #059669;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 640px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dopamine Popup */
+        #dopamine-popup {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #dopamine-popup.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .dopamine-card {
+            background: #1e293b;
+            border: 1px solid #3b82f6;
+            box-shadow: 0 0 50px rgba(59, 130, 246, 0.2);
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 400px;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #dopamine-popup.active .dopamine-card {
+            transform: scale(1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                        <i class="fa-solid fa-dna"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">Навигатор<span
+                            class="text-blue-600">Талантов</span></span>
+                </div>
+                <a href="index.html"
+                    class="text-sm font-medium text-slate-600 hover:text-blue-600 transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> На главную
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="step-indicator">
+            <span id="currentStep">1</span> из <span id="totalSteps">12</span>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 8.33%"></div>
+        </div>
+
+        <div class="card">
+            <form id="assessmentForm">
+
+                <!-- Шаг 1: Базовая информация -->
+                <div class="step-content active" data-step="1">
+                    <h2 class="step-title"><i class="fas fa-user"></i> Базовая Информация</h2>
+                    <p class="step-description">Расскажите нам о ребенке</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Имя ребенка <span class="required">*</span></label>
+                        <input type="text" class="form-input" name="childName" required
+                            placeholder="Например, Александр">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Возраст <span class="required">*</span></label>
+                            <input type="number" class="form-input" name="childAge" required min="3" max="18"
+                                placeholder="Лет">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Класс</label>
+                            <input type="text" class="form-input" name="childGrade" placeholder="Например, 7">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Пол <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="childGender" value="Мальчик" required>
+                                <span>Мальчик</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="childGender" value="Девочка">
+                                <span>Девочка</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Город проживания</label>
+                        <input type="text" class="form-input" name="city" placeholder="Например, Казань">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Состав семьи</label>
+                        <textarea class="form-textarea" name="familyComposition"
+                            placeholder="Например: мама, папа, младшая сестра 5 лет"></textarea>
+                        <div class="form-hint">Братья, сестры, их возраст</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Профессии родителей</label>
+                        <input type="text" class="form-input" name="parentsOccupation"
+                            placeholder="Например: мама - учитель, папа - программист">
+                    </div>
+                </div>
+
+                <!-- Шаг 2: Академические показатели -->
+                <div class="step-content" data-step="2">
+                    <h2 class="step-title"><i class="fas fa-graduation-cap"></i> Академические Показатели</h2>
+                    <p class="step-description">Успеваемость и стиль обучения</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Любимые предметы (топ-3) <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="favoriteSubjects" required
+                            placeholder="Например: Математика (нравится решать задачи), Информатика (интересно программировать)"></textarea>
+                        <div class="form-hint">Укажите предметы и объясните, почему они нравятся</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Сложные предметы</label>
+                        <textarea class="form-textarea" name="difficultSubjects"
+                            placeholder="Например: Русский язык (скучно учить правила), История (много дат)"></textarea>
+                        <div class="form-hint">Что вызывает трудности и почему</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Как ребенок лучше усваивает информацию? <span
+                                class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="learningStyle" value="Визуально">
+                                <span>Визуально (картинки, схемы, видео)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="learningStyle" value="Аудиально">
+                                <span>Аудиально (объяснения, подкасты)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="learningStyle" value="Кинестетически">
+                                <span>Кинестетически (практика, эксперименты)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="learningStyle" value="Чтение и письмо">
+                                <span>Через чтение и письмо</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Дополнительное образование</label>
+                        <textarea class="form-textarea" name="extraEducation"
+                            placeholder="Например: Курсы Python (6 месяцев), Робототехника (2 года, бросил - стало скучно)"></textarea>
+                        <div class="form-hint">Кружки, секции, курсы - текущие и прошлые, что понравилось/не понравилось
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Шаг 3: Интересы и увлечения -->
+                <div class="step-content" data-step="3">
+                    <h2 class="step-title"><i class="fas fa-palette"></i> Интересы и Увлечения</h2>
+                    <p class="step-description">Чем занимается ребенок в свободное время</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Основные хобби и увлечения <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="hobbies" required
+                            placeholder="Например: Создает игры в Roblox (8 месяцев, очень увлечен), рисует комиксы"></textarea>
+                        <div class="form-hint">Топ-5 активностей в свободное время, как давно, насколько серьезно</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Любимые игры</label>
+                        <input type="text" class="form-input" name="favoriteGames"
+                            placeholder="Например: Minecraft, шахматы, футбол">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Что смотрит/читает</label>
+                        <textarea class="form-textarea" name="mediaConsumption"
+                            placeholder="Например: YouTube каналы про программирование, фантастические книги, научпоп про космос"></textarea>
+                        <div class="form-hint">Жанры, темы, конкретные примеры</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Творческие занятия</label>
+                        <textarea class="form-textarea" name="creativeActivities"
+                            placeholder="Например: Рисует, лепит из глины, пишет рассказы, снимает видео"></textarea>
+                        <div class="form-hint">Что любит создавать своими руками</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Цифровые навыки</label>
+                        <textarea class="form-textarea" name="digitalSkills"
+                            placeholder="Например: Уверенно владеет компьютером, знает Python, изучает Blender"></textarea>
+                        <div class="form-hint">Уровень владения технологиями, программирование, приложения</div>
+                    </div>
+                </div>
+
+                <!-- Шаг 4: Социальные навыки -->
+                <div class="step-content" data-step="4">
+                    <h2 class="step-title"><i class="fas fa-users"></i> Социальные Навыки</h2>
+                    <p class="step-description">Общение и взаимодействие с другими</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Интроверт или экстраверт? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="socialType" value="Экстраверт" required>
+                                <span>Экстраверт (заряжается от общения, любит большие компании)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="socialType" value="Интроверт">
+                                <span>Интроверт (предпочитает узкий круг друзей, нужно время в одиночестве)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="socialType" value="Амбиверт">
+                                <span>Амбиверт (комфортно и в компании, и в одиночестве)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Легко ли заводит новых друзей?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="makingFriends" value="Легко">
+                                <span>Легко, быстро находит общий язык</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="makingFriends" value="Средне">
+                                <span>Нужно время, чтобы раскрыться</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="makingFriends" value="Сложно">
+                                <span>Сложно, предпочитает старых друзей</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Лидерские качества</label>
+                        <textarea class="form-textarea" name="leadership"
+                            placeholder="Например: Берет на себя роль организатора в играх, может убедить других"></textarea>
+                        <div class="form-hint">Берет ли на себя роль лидера, может ли организовать других</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Как реагирует на критику и неудачи?</label>
+                        <textarea class="form-textarea" name="reactionToCriticism"
+                            placeholder="Например: Сначала расстраивается, но потом пробует снова"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Эмпатия и помощь другим</label>
+                        <textarea class="form-textarea" name="empathy"
+                            placeholder="Например: Чувствителен к эмоциям других, часто помогает одноклассникам"></textarea>
+                        <div class="form-hint">Чувствителен ли к эмоциям других, помогает ли по собственной инициативе
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Шаг 5: Когнитивные способности -->
+                <div class="step-content" data-step="5">
+                    <h2 class="step-title"><i class="fas fa-lightbulb"></i> Когнитивные Способности</h2>
+                    <p class="step-description">Мышление и решение задач</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Тип мышления <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="thinkingType" value="Аналитическое">
+                                <span>Аналитическое (любит логические задачи, головоломки)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="thinkingType" value="Творческое">
+                                <span>Творческое (придумывает необычные решения, фантазирует)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="thinkingType" value="Практическое">
+                                <span>Практическое (предпочитает конкретные задачи с видимым результатом)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="thinkingType" value="Абстрактное">
+                                <span>Абстрактное (легко работает с теориями и концепциями)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Как решает сложные задачи?</label>
+                        <textarea class="form-textarea" name="problemSolving"
+                            placeholder="Например: Пробует разные способы, не сдается. Может разбить большую задачу на маленькие шаги"></textarea>
+                        <div class="form-hint">Сдается или пробует разные способы? Может ли разбить задачу на шаги?
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Память и внимание</label>
+                        <textarea class="form-textarea" name="memoryAttention"
+                            placeholder="Например: Легко запоминает визуальные образы, может долго концентрироваться на интересной задаче"></textarea>
+                        <div class="form-hint">Что запоминается лучше? Может ли долго концентрироваться?</div>
+                    </div>
+                </div>
+
+                <!-- Шаг 6: Физическая активность -->
+                <div class="step-content" data-step="6">
+                    <h2 class="step-title"><i class="fas fa-running"></i> Физическая Активность</h2>
+                    <p class="step-description">Спорт и физическое развитие</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Занимается ли спортом?</label>
+                        <textarea class="form-textarea" name="sportsActivity"
+                            placeholder="Например: Футбол 2 раза в неделю, плавание по выходным"></textarea>
+                        <div class="form-hint">Каким спортом, как часто</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Уровень физической активности <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="activityLevel" value="Высокий" required>
+                                <span>Высокий (постоянно в движении, энергичный)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="activityLevel" value="Средний">
+                                <span>Средний (умеренная активность)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="activityLevel" value="Низкий">
+                                <span>Низкий (предпочитает спокойные занятия)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Координация и ловкость</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="coordination" value="Отличная">
+                                <span>Отличная (ловкий, хорошая координация)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="coordination" value="Средняя">
+                                <span>Средняя (обычная для возраста)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="coordination" value="Есть сложности">
+                                <span>Есть сложности (неуклюжий, часто спотыкается)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Энергичность в течение дня</label>
+                        <textarea class="form-textarea" name="energyPattern"
+                            placeholder="Например: Утром вялый, к вечеру полон энергии"></textarea>
+                    </div>
+                </div>
+
+                <!-- Шаг 7: Мотивация и цели -->
+                <div class="step-content" data-step="7">
+                    <h2 class="step-title"><i class="fas fa-trophy"></i> Мотивация и Цели</h2>
+                    <p class="step-description">Мечты и планы на будущее</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Кем хочет стать? <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="careerDreams" required
+                            placeholder="Например: Разработчиком игр, потому что хочет создать свою игру, которую будут знать миллионы"></textarea>
+                        <div class="form-hint">Профессии, которые называет, и почему именно они</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Что вдохновляет ребенка?</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="motivation" value="Любопытство">
+                                <span>Любопытство и познание нового</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="motivation" value="Достижения">
+                                <span>Достижения и победы</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="motivation" value="Признание">
+                                <span>Признание и похвала</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="motivation" value="Помощь другим">
+                                <span>Помощь другим людям</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Что может делать часами, забывая о времени?</label>
+                        <input type="text" class="form-input" name="flowActivities"
+                            placeholder="Например: Программирование, рисование, конструирование">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Доводит ли начатое до конца?</label>
+                        <textarea class="form-textarea" name="persistence"
+                            placeholder="Например: Обычно доводит, но если становится рутинно - может бросить"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Есть ли кумиры, примеры для подражания?</label>
+                        <input type="text" class="form-input" name="roleModels"
+                            placeholder="Например: Илон Маск, Стив Джобс, любимый блогер">
+                    </div>
+                </div>
+
+                <!-- Шаг 8: Характер и личность -->
+                <div class="step-content" data-step="8">
+                    <h2 class="step-title"><i class="fas fa-heart"></i> Характер и Личность</h2>
+                    <p class="step-description">Черты характера и ценности</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Основные черты характера <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="personality" value="Самостоятельный">
+                                <span>Самостоятельный (может сам организовать свое время)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="personality" value="Ответственный">
+                                <span>Ответственный (выполняет обещания)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="personality" value="Любознательный">
+                                <span>Любознательный (задает много вопросов)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="personality" value="Упорный">
+                                <span>Упорный (не сдается при трудностях)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="personality" value="Креативный">
+                                <span>Креативный (придумывает новое, нестандартное)</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="personality" value="Организованный">
+                                <span>Организованный (порядок в вещах, планирование)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Что для ребенка важно?</label>
+                        <textarea class="form-textarea" name="values"
+                            placeholder="Например: Семья, справедливость, творчество, успех"></textarea>
+                        <div class="form-hint">Ценности: семья, друзья, успех, творчество, справедливость и т.д.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Что его расстраивает или злит?</label>
+                        <input type="text" class="form-input" name="triggers"
+                            placeholder="Например: Несправедливость, когда не получается с первого раза">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Чем гордится?</label>
+                        <input type="text" class="form-input" name="proudOf"
+                            placeholder="Например: Своими проектами, помощью младшей сестре">
+                    </div>
+                </div>
+
+                <!-- Шаг 9: Особые способности -->
+                <div class="step-content" data-step="9">
+                    <h2 class="step-title"><i class="fas fa-star"></i> Особые Способности</h2>
+                    <p class="step-description">Таланты и уникальные навыки</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Что получается значительно лучше сверстников?</label>
+                        <textarea class="form-textarea" name="specialAbilities"
+                            placeholder="Например: Быстро решает математические задачи, отлично рисует, легко учит языки"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Отмечали ли учителя/тренеры особые способности?</label>
+                        <textarea class="form-textarea" name="teacherFeedback"
+                            placeholder="Например: Учитель математики говорит, что у него математический склад ума"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Необычные хобби или интересы</label>
+                        <input type="text" class="form-input" name="uniqueInterests"
+                            placeholder="Например: Коллекционирует минералы, изучает астрономию">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Изучает ли что-то углубленно самостоятельно?</label>
+                        <input type="text" class="form-input" name="selfStudy"
+                            placeholder="Например: Самостоятельно изучает квантовую физику по YouTube">
+                    </div>
+                </div>
+
+                <!-- Шаг 10: Вызовы и сложности -->
+                <div class="step-content" data-step="10">
+                    <h2 class="step-title"><i class="fas fa-exclamation-triangle"></i> Вызовы и Области Роста</h2>
+                    <p class="step-description">Сложности и зоны развития</p>
+
+                    <div class="form-group">
+                        <label class="form-label">С чем ребенок испытывает наибольшие трудности?</label>
+                        <textarea class="form-textarea" name="challenges"
+                            placeholder="Например: Сложно концентрироваться на скучных задачах, стесняется выступать публично"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Что вызывает стресс или тревогу?</label>
+                        <textarea class="form-textarea" name="stressors"
+                            placeholder="Например: Контрольные работы, новые люди, публичные выступления"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Есть ли предметы/навыки, которые категорически не нравятся?</label>
+                        <input type="text" class="form-input" name="dislikes"
+                            placeholder="Например: Физкультура, рисование, чтение">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Какие навыки хотели бы развить?</label>
+                        <textarea class="form-textarea" name="skillsToImprove"
+                            placeholder="Например: Уверенность в себе, умение работать в команде, концентрацию"></textarea>
+                        <div class="form-hint">Что родители и сам ребенок хотели бы улучшить</div>
+                    </div>
+                </div>
+
+                <!-- Шаг 11: Контекст и возможности -->
+                <div class="step-content" data-step="11">
+                    <h2 class="step-title"><i class="fas fa-map-marked-alt"></i> Контекст и Возможности</h2>
+                    <p class="step-description">Доступные ресурсы и ограничения</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Какие образовательные возможности доступны?</label>
+                        <textarea class="form-textarea" name="availableResources"
+                            placeholder="Например: Хорошие школы в районе, доступ к онлайн-курсам, есть компьютер"></textarea>
+                        <div class="form-hint">Школы, кружки, онлайн-курсы, оборудование</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Сколько времени можно выделить на развитие?</label>
+                        <input type="text" class="form-input" name="availableTime"
+                            placeholder="Например: 5-7 часов в неделю">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Финансовые возможности для дополнительного образования</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="budget" value="Высокие">
+                                <span>Высокие (можем позволить любые курсы и занятия)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="budget" value="Средние">
+                                <span>Средние (1-2 платных занятия в неделю)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="budget" value="Ограниченные">
+                                <span>Ограниченные (предпочтительно бесплатные варианты)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Есть ли ограничения?</label>
+                        <textarea class="form-textarea" name="limitations"
+                            placeholder="Например: Живем далеко от центра города, нет возможности возить на занятия по будням"></textarea>
+                        <div class="form-hint">Временные, географические или другие факторы</div>
+                    </div>
+                </div>
+
+                <!-- Шаг 12: Вопросы для родителей -->
+                <div class="step-content" data-step="12">
+                    <h2 class="step-title"><i class="fas fa-comments"></i> Вопросы для Родителей</h2>
+                    <p class="step-description">Ваши наблюдения и ожидания</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Как изменился ребенок за последний год? <span
+                                class="required">*</span></label>
+                        <textarea class="form-textarea" name="recentChanges" required
+                            placeholder="Например: Стал более самостоятельным, появился интерес к программированию"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Какие моменты в развитии ребенка вас радуют?</label>
+                        <textarea class="form-textarea" name="positiveObservations"
+                            placeholder="Например: Проявляет инициативу, помогает младшим, увлечен своими проектами"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Что вызывает беспокойство?</label>
+                        <textarea class="form-textarea" name="concerns"
+                            placeholder="Например: Мало двигается, слишком много времени за компьютером, нет друзей"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Какие цели вы ставите для развития ребенка?</label>
+                        <textarea class="form-textarea" name="parentGoals"
+                            placeholder="Например: Найти дело, которое будет приносить радость и доход, развить уверенность в себе"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Что для вас важнее?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="parentPriority" value="Счастье">
+                                <span>Счастье и самореализация ребенка</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="parentPriority" value="Успех">
+                                <span>Академические успехи и карьера</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="parentPriority" value="Баланс">
+                                <span>Баланс между счастьем и успехом</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Дополнительные комментарии</label>
+                        <textarea class="form-textarea" name="additionalComments"
+                            placeholder="Любая дополнительная информация, которую вы считаете важной"></textarea>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" id="prevBtn" onclick="previousStep()"
+                    style="display: none;">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Результат -->
+        <div class="card result-container" id="resultContainer">
+            <h2 class="step-title"><i class="fas fa-check-circle"></i> Профиль Готов!</h2>
+            <p class="step-description">Скопируйте промпт ниже и вставьте в Gemini для получения персонализированных
+                рекомендаций</p>
+
+            <div class="prompt-box" id="generatedPrompt"></div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="saveToDatabase()">
+                    <i class="fas fa-database"></i> Сохранить в Базу Данных
+                </button>
+                <button class="btn btn-primary" onclick="copyPrompt()">
+                    <i class="fas fa-copy"></i> Скопировать Промпт
+                </button>
+                <button class="btn btn-secondary" onclick="downloadProfile()">
+                    <i class="fas fa-download"></i> Скачать Профиль (JSON)
+                </button>
+                <button class="btn btn-secondary" onclick="location.href='profiles.html'">
+                    <i class="fas fa-list"></i> Все Профили
+                </button>
+                <button class="btn btn-secondary" onclick="location.href='index.html'">
+                    <i class="fas fa-home"></i> На Главную
+                </button>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i>
+                <span>Промпт скопирован в буфер обмена!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dopamine Popup -->
+    <div id="dopamine-popup">
+        <div class="dopamine-card">
+            <div
+                class="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-[0_0_30px_rgba(59,130,246,0.5)] border border-blue-500/50">
+                <i class="fa-solid fa-unlock-keyhole text-blue-400"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2" id="dopamine-title">Инсайт Открыт!</h3>
+            <p class="text-slate-300 mb-8 text-lg" id="dopamine-text">Ваш ребенок демонстрирует признаки высокого
+                потенциала.</p>
+            <button onclick="closeDopaminePopup()"
+                class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-8 py-4 rounded-xl font-bold transition transform hover:scale-105 shadow-lg">
+                Продолжить <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 12;
+        const formData = {};
+
+        // Инициализация
+        document.getElementById('totalSteps').textContent = totalSteps;
+        updateProgress();
+
+        // Обработчики для radio и checkbox
+        document.querySelectorAll('.radio-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+
+                // Убираем selected у всех siblings
+                this.parentElement.querySelectorAll('.radio-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+
+                // Добавляем selected к текущему
+                this.classList.add('selected');
+            });
+        });
+
+        document.querySelectorAll('.checkbox-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+
+                if (checkbox.checked) {
+                    this.classList.add('selected');
+                } else {
+                    this.classList.remove('selected');
+                }
+            });
+        });
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentStep').textContent = currentStep;
+
+            // Показать/скрыть кнопки
+            document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'block';
+
+            if (currentStep === totalSteps) {
+                document.getElementById('nextBtn').innerHTML = '<i class="fas fa-check"></i> Завершить';
+            } else {
+                document.getElementById('nextBtn').innerHTML = 'Далее <i class="fas fa-arrow-right"></i>';
+            }
+        }
+
+        function nextStep() {
+            // Валидация текущего шага
+            const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+            const requiredFields = currentStepElement.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (field.type === 'radio') {
+                    const radioGroup = currentStepElement.querySelectorAll(`[name="${field.name}"]`);
+                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                    if (!isChecked) {
+                        isValid = false;
+                        alert('Пожалуйста, заполните все обязательные поля');
+                    }
+                } else if (field.type === 'checkbox') {
+                    const checkboxGroup = currentStepElement.querySelectorAll(`[name="${field.name}"]`);
+                    const isChecked = Array.from(checkboxGroup).some(checkbox => checkbox.checked);
+                    if (!isChecked) {
+                        isValid = false;
+                        alert('Пожалуйста, выберите хотя бы один вариант');
+                    }
+                } else if (!field.value.trim()) {
+                    isValid = false;
+                    field.focus();
+                    alert('Пожалуйста, заполните все обязательные поля');
+                }
+            });
+
+            if (!isValid) return;
+
+            // Сохранить данные текущего шага
+            saveStepData(currentStep);
+
+            // Gamification: Dopamine Hits
+            if ([3, 6, 9].includes(currentStep)) {
+                showInsightPopup(currentStep);
+                return;
+            }
+
+            proceedToNextStep();
+        }
+
+        const insights = {
+            3: {
+                title: "Обнаружен Паттерн",
+                text: "Мы видим интересную связь между хобби и типом мышления.",
+                icon: "fa-diagram-project"
+            },
+            6: {
+                title: "Профиль Энергии",
+                text: "Физическая активность вашего ребенка указывает на высокий потенциал в спринтерских видах.",
+                icon: "fa-bolt"
+            },
+            9: {
+                title: "Найден Скрытый Талант",
+                text: "Сочетание качеств, которое вы указали, встречается всего у 4% детей.",
+                icon: "fa-gem"
+            }
+        };
+
+        function showInsightPopup(step) {
+            const popup = document.getElementById('dopamine-popup');
+            const data = insights[step];
+
+            document.getElementById('dopamine-title').textContent = data.title;
+            document.getElementById('dopamine-text').textContent = data.text;
+            popup.querySelector('i').className = `fa-solid ${data.icon} text-blue-400`;
+
+            popup.classList.add('active');
+        }
+
+        function closeDopaminePopup() {
+            document.getElementById('dopamine-popup').classList.remove('active');
+            proceedToNextStep();
+        }
+
+        function proceedToNextStep() {
+            if (currentStep === totalSteps) {
+                // Показать результат
+                generatePrompt();
+                document.querySelector('.card:not(.result-container)').style.display = 'none';
+                document.getElementById('resultContainer').classList.add('active');
+                window.scrollTo(0, 0);
+            } else {
+                // Перейти к следующему шагу
+                const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+                currentStepElement.classList.remove('active');
+                currentStep++;
+                document.querySelector(`.step-content[data-step="${currentStep}"]`).classList.add('active');
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function previousStep() {
+            const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+            currentStepElement.classList.remove('active');
+            currentStep--;
+            document.querySelector(`.step-content[data-step="${currentStep}"]`).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function saveStepData(step) {
+            const stepElement = document.querySelector(`.step-content[data-step="${step}"]`);
+            const inputs = stepElement.querySelectorAll('input, textarea, select');
+
+            inputs.forEach(input => {
+                if (input.type === 'radio') {
+                    if (input.checked) {
+                        formData[input.name] = input.value;
+                    }
+                } else if (input.type === 'checkbox') {
+                    if (!formData[input.name]) formData[input.name] = [];
+                    if (input.checked && !formData[input.name].includes(input.value)) {
+                        formData[input.name].push(input.value);
+                    }
+                } else {
+                    formData[input.name] = input.value;
+                }
+            });
+
+            // Сохранить в localStorage
+            localStorage.setItem('assessmentData', JSON.stringify(formData));
+        }
+
+        function generatePrompt() {
+            const prompt = `Проанализируй профиль ребенка и предоставь персонализированные рекомендации:
+
+БАЗОВАЯ ИНФОРМАЦИЯ:
+- Имя: ${formData.childName || 'Не указано'}
+- Возраст: ${formData.childAge || 'Не указано'} лет
+- Класс: ${formData.childGrade || 'Не указано'}
+- Пол: ${formData.childGender || 'Не указано'}
+- Город: ${formData.city || 'Не указано'}
+- Состав семьи: ${formData.familyComposition || 'Не указано'}
+- Профессии родителей: ${formData.parentsOccupation || 'Не указано'}
+
+АКАДЕМИЧЕСКИЕ ПОКАЗАТЕЛИ:
+- Любимые предметы: ${formData.favoriteSubjects || 'Не указано'}
+- Сложные предметы: ${formData.difficultSubjects || 'Не указано'}
+- Стиль обучения: ${Array.isArray(formData.learningStyle) ? formData.learningStyle.join(', ') : 'Не указано'}
+- Дополнительное образование: ${formData.extraEducation || 'Не указано'}
+
+ИНТЕРЕСЫ И УВЛЕЧЕНИЯ:
+- Основные хобби: ${formData.hobbies || 'Не указано'}
+- Любимые игры: ${formData.favoriteGames || 'Не указано'}
+- Что смотрит/читает: ${formData.mediaConsumption || 'Не указано'}
+- Творческие занятия: ${formData.creativeActivities || 'Не указано'}
+- Цифровые навыки: ${formData.digitalSkills || 'Не указано'}
+
+СОЦИАЛЬНЫЕ НАВЫКИ:
+- Тип: ${formData.socialType || 'Не указано'}
+- Заводит друзей: ${formData.makingFriends || 'Не указано'}
+- Лидерские качества: ${formData.leadership || 'Не указано'}
+- Реакция на критику: ${formData.reactionToCriticism || 'Не указано'}
+- Эмпатия: ${formData.empathy || 'Не указано'}
+
+КОГНИТИВНЫЕ СПОСОБНОСТИ:
+- Тип мышления: ${Array.isArray(formData.thinkingType) ? formData.thinkingType.join(', ') : 'Не указано'}
+- Решение проблем: ${formData.problemSolving || 'Не указано'}
+- Память и внимание: ${formData.memoryAttention || 'Не указано'}
+
+ФИЗИЧЕСКАЯ АКТИВНОСТЬ:
+- Спорт: ${formData.sportsActivity || 'Не указано'}
+- Уровень активности: ${formData.activityLevel || 'Не указано'}
+- Координация: ${formData.coordination || 'Не указано'}
+- Энергия в течение дня: ${formData.energyPattern || 'Не указано'}
+
+МОТИВАЦИЯ И ЦЕЛИ:
+- Карьерные мечты: ${formData.careerDreams || 'Не указано'}
+- Что вдохновляет: ${Array.isArray(formData.motivation) ? formData.motivation.join(', ') : 'Не указано'}
+- Flow активности: ${formData.flowActivities || 'Не указано'}
+- Упорство: ${formData.persistence || 'Не указано'}
+- Кумиры: ${formData.roleModels || 'Не указано'}
+
+ХАРАКТЕР И ЛИЧНОСТЬ:
+- Черты характера: ${Array.isArray(formData.personality) ? formData.personality.join(', ') : 'Не указано'}
+- Ценности: ${formData.values || 'Не указано'}
+- Триггеры: ${formData.triggers || 'Не указано'}
+- Гордится: ${formData.proudOf || 'Не указано'}
+
+ОСОБЫЕ СПОСОБНОСТИ:
+- Особые способности: ${formData.specialAbilities || 'Не указано'}
+- Отзывы учителей: ${formData.teacherFeedback || 'Не указано'}
+- Уникальные интересы: ${formData.uniqueInterests || 'Не указано'}
+- Самостоятельное изучение: ${formData.selfStudy || 'Не указано'}
+
+ВЫЗОВЫ И СЛОЖНОСТИ:
+- Трудности: ${formData.challenges || 'Не указано'}
+- Стрессоры: ${formData.stressors || 'Не указано'}
+- Не нравится: ${formData.dislikes || 'Не указано'}
+- Навыки для развития: ${formData.skillsToImprove || 'Не указано'}
+
+КОНТЕКСТ И ВОЗМОЖНОСТИ:
+- Доступные ресурсы: ${formData.availableResources || 'Не указано'}
+- Доступное время: ${formData.availableTime || 'Не указано'}
+- Бюджет: ${formData.budget || 'Не указано'}
+- Ограничения: ${formData.limitations || 'Не указано'}
+
+НАБЛЮДЕНИЯ РОДИТЕЛЕЙ:
+- Изменения за год: ${formData.recentChanges || 'Не указано'}
+- Что радует: ${formData.positiveObservations || 'Не указано'}
+- Беспокойства: ${formData.concerns || 'Не указано'}
+- Цели родителей: ${formData.parentGoals || 'Не указано'}
+- Приоритет: ${formData.parentPriority || 'Не указано'}
+- Дополнительно: ${formData.additionalComments || 'Не указано'}
+
+ЗАПРОС К GEMINI:
+На основе этих данных, пожалуйста:
+1. Определи ключевые сильные стороны и таланты ребенка
+2. Предложи 3-5 профессиональных направлений, которые максимально соответствуют профилю
+3. Составь индивидуальный план развития на ближайшие 6-12 месяцев
+4. Порекомендуй конкретные курсы, книги, проекты для развития
+5. Укажи на потенциальные риски и области, требующие внимания
+6. Дай рекомендации родителям по поддержке ребенка`;
+
+            document.getElementById('generatedPrompt').textContent = prompt;
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('generatedPrompt').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                const successMsg = document.getElementById('successMessage');
+                successMsg.classList.add('show');
+                setTimeout(() => {
+                    successMsg.classList.remove('show');
+                }, 3000);
+            });
+        }
+
+        function downloadProfile() {
+            const dataStr = JSON.stringify(formData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `profile_${formData.childName || 'child'}_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Восстановить данные из localStorage при загрузке
+        window.addEventListener('load', () => {
+            const savedData = localStorage.getItem('assessmentData');
+            if (savedData) {
+                const shouldRestore = confirm('Найдены сохраненные данные. Восстановить?');
+                if (shouldRestore) {
+                    Object.assign(formData, JSON.parse(savedData));
+                    // Заполнить форму сохраненными данными
+                    Object.keys(formData).forEach(key => {
+                        const input = document.querySelector(`[name="${key}"]`);
+                        if (input) {
+                            if (input.type === 'radio') {
+                                const radio = document.querySelector(`[name="${key}"][value="${formData[key]}"]`);
+                                if (radio) {
+                                    radio.checked = true;
+                                    radio.closest('.radio-option').classList.add('selected');
+                                }
+                            } else if (input.type === 'checkbox') {
+                                if (Array.isArray(formData[key])) {
+                                    formData[key].forEach(value => {
+                                        const checkbox = document.querySelector(`[name="${key}"][value="${value}"]`);
+                                        if (checkbox) {
+                                            checkbox.checked = true;
+                                            checkbox.closest('.checkbox-option').classList.add('selected');
+                                        }
+                                    });
+                                }
+                            } else {
+                                input.value = formData[key];
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        // Проверить, нужно ли загрузить профиль из базы данных
+        window.addEventListener('load', async () => {
+            const loadProfileId = localStorage.getItem('loadProfileId');
+            if (loadProfileId) {
+                localStorage.removeItem('loadProfileId');
+                await loadProfileFromDatabase(loadProfileId);
+            }
+        });
+
+        // Сохранить профиль в базу данных
+        async function saveToDatabase() {
+            try {
+                const response = await fetch('api/profiles.php?action=save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        childName: formData.childName,
+                        childAge: formData.childAge,
+                        profileData: formData
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const successMsg = document.getElementById('successMessage');
+                    successMsg.querySelector('span').textContent = `Профиль успешно сохранен в базу данных! ID: ${data.id}`;
+                    successMsg.classList.add('show');
+                    setTimeout(() => {
+                        successMsg.classList.remove('show');
+                        successMsg.querySelector('span').textContent = 'Промпт скопирован в буфер обмена!';
+                    }, 5000);
+                } else {
+                    alert('Ошибка сохранения: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error saving to database:', error);
+                alert('Ошибка подключения к базе данных. Проверьте, что сервер запущен.');
+            }
+        }
+
+        // Загрузить профиль из базы данных
+        async function loadProfileFromDatabase(profileId) {
+            try {
+                const response = await fetch(`api/profiles.php?action=get&id=${profileId}`);
+                const data = await response.json();
+
+                if (data.success && data.profile) {
+                    const profileData = data.profile.profile_data;
+                    Object.assign(formData, profileData);
+
+                    // Заполнить форму данными
+                    Object.keys(profileData).forEach(key => {
+                        const input = document.querySelector(`[name="${key}"]`);
+                        if (input) {
+                            if (input.type === 'radio') {
+                                const radio = document.querySelector(`[name="${key}"][value="${profileData[key]}"]`);
+                                if (radio) {
+                                    radio.checked = true;
+                                    radio.closest('.radio-option').classList.add('selected');
+                                }
+                            } else if (input.type === 'checkbox') {
+                                if (Array.isArray(profileData[key])) {
+                                    profileData[key].forEach(value => {
+                                        const checkbox = document.querySelector(`[name="${key}"][value="${value}"]`);
+                                        if (checkbox) {
+                                            checkbox.checked = true;
+                                            checkbox.closest('.checkbox-option').classList.add('selected');
+                                        }
+                                    });
+                                }
+                            } else {
+                                input.value = profileData[key];
+                            }
+                        }
+                    });
+
+                    alert(`Профиль "${data.profile.child_name}" загружен из базы данных`);
+                } else {
+                    alert('Ошибка загрузки профиля: ' + (data.error || 'Профиль не найден'));
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                alert('Ошибка загрузки профиля из базы данных');
+            }
+        }
+    </script>
+</body>
+
+</html>

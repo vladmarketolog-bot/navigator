@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навигатор Талантов | AI-анализ будущего ребенка</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #2563EB, #06B6D4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-pattern {
+            background-color: #f8fafc;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e2e8f0' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .gemini-sparkle {
+            animation: sparkle 2s infinite linear;
+        }
+
+        @keyframes sparkle {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        /* Utility for range input */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #2563EB;
+            cursor: pointer;
+            margin-top: -8px;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #E2E8F0;
+            border-radius: 2px;
+        }
+
+        .chat-bubble {
+            position: relative;
+            background: #F8FAFC;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            bottom: -8px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #F8FAFC;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 bg-slate-50 antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                        <i class="fa-solid fa-dna"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">Навигатор<span
+                            class="text-blue-600">Талантов</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+                    <a href="assessment.html" class="hover:text-blue-600 transition">Полный опросник</a>
+                    <a href="#calculator" class="hover:text-blue-600 transition">Калькулятор ошибок</a>
+                    <a href="#methodology" class="hover:text-blue-600 transition">Метод</a>
+                    <a href="#reviews" class="hover:text-blue-600 transition">Отзывы</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main id="main-content">
+
+        <!-- Hero Section -->
+        <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden hero-pattern">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6">
+                    <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                    Персональный AI-Навигатор
+                </div>
+                <!-- 2026 Trend: The Epiphany Hook -->
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
+                    У вашего ребенка уже есть <br class="hidden md:block">
+                    <span class="gradient-text">встроенный талант.</span>
+                </h1>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-600 leading-relaxed">
+                    Нам нужно просто прочитать этот код. Gemini AI расшифрует нейродинамику и скажет,
+                    где он станет чемпионом, а где — просто потеряет время.
+                </p>
+
+                <div id="micro-quiz-container" class="mt-10 w-full max-w-md mx-auto">
+                    <!-- Loading / Fallback -->
+                    <a href="assessment.html"
+                        class="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg shadow-blue-200 shadow-xl hover:bg-blue-700 hover:scale-105 transition transform flex items-center justify-center gap-2">
+                        <i class="fas fa-magic"></i> Расшифровать Талант
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Anchor (Moved UP) -->
+        <section class="py-12 bg-slate-900 text-white border-b border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span class="text-xs font-mono text-green-400 uppercase tracking-widest">Verified
+                                Source</span>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-2">Не очередной "ChatGPT Wrapper"</h2>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Обычный AI галлюцинирует. Мы загрузили в Gemini <strong>50,000+ клинических
+                                протоколов</strong> спортивной медицины и физиологии.
+                        </p>
+                    </div>
+                    <div
+                        class="flex flex-wrap gap-4 md:justify-end opacity-70 grayscale hover:grayscale-0 transition duration-500">
+                        <!-- Placeholders for Logos -->
+                        <div class="flex items-center gap-2 border border-slate-700 rounded-lg px-3 py-2">
+                            <i class="fa-solid fa-university text-slate-400"></i> <span
+                                class="text-xs font-bold text-slate-300">Sports Science Inst.</span>
+                        </div>
+                        <div class="flex items-center gap-2 border border-slate-700 rounded-lg px-3 py-2">
+                            <i class="fa-solid fa-database text-slate-400"></i> <span
+                                class="text-xs font-bold text-slate-300">PubMed Data</span>
+                        </div>
+                        <div class="flex items-center gap-2 border border-slate-700 rounded-lg px-3 py-2">
+                            <i class="fa-solid fa-shield-halved text-slate-400"></i> <span
+                                class="text-xs font-bold text-slate-300">HIPAA Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pain Slide: 10,000 Hour Rule -->
+        <section id="calculator" class="py-20 bg-white">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">Правило 10,000 часов...</h2>
+                    <p class="text-slate-600 mt-4 max-w-2xl mx-auto leading-relaxed text-lg">
+                        ...работает только если вектор выбран правильно. <br>
+                        Если нет — это <span class="text-red-500 font-bold">10,000 часов мучений</span> и сломанная
+                        психика.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 md:p-12 relative overflow-hidden text-center">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-red-100 rounded-full blur-3xl -mr-16 -mt-16"></div>
+
+                    <h3 class="text-xl font-bold mb-8 text-slate-700">Что на кону?</h3>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="p-6 bg-red-50 rounded-xl border border-red-100">
+                            <div class="text-red-500 text-4xl mb-4"><i class="fa-solid fa-road-spikes"></i></div>
+                            <h4 class="font-bold text-slate-900 mb-2">Не тот путь</h4>
+                            <p class="text-sm text-slate-600">Слезы перед тренировкой. Травмы. "Я неудачник". Потерянные
+                                3-5 лет жизни.</p>
+                        </div>
+                        <div class="p-6 bg-emerald-50 rounded-xl border border-emerald-100 relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex items-center justify-center z-10">
+                                <div
+                                    class="bg-white/80 px-4 py-2 rounded-full shadow-sm text-sm font-bold text-slate-600">
+                                    <i class="fa-solid fa-lock"></i> Доступно после анализа
+                                </div>
+                            </div>
+                            <div class="text-emerald-500 text-4xl mb-4"><i class="fa-solid fa-rocket"></i></div>
+                            <h4 class="font-bold text-slate-900 mb-2">Путь Таланта</h4>
+                            <p class="text-sm text-slate-600">Состояние потока. Первые места. Уверенность в себе. "Я
+                                рожден для этого".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution: Product Showcase (Moved UP) -->
+        <section class="py-20 bg-slate-50 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Взлом реальности: что внутри?</h2>
+                    <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+                        Это не скучная справка. Это визуальный дашборд вашего будущего чемпиона.
+                    </p>
+                </div>
+
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <!-- Text Content -->
+                    <div class="lg:w-1/2 space-y-8">
+                        <div class="flex gap-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                                <span class="font-bold text-lg">01</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Вердикт "Без воды"</h3>
+                                <p class="text-slate-600">Система говорит прямо: "Хоккей". Почему? "Взрывной старт
+                                    (генетика) + Агрессия (психика)".</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                                <span class="font-bold text-lg">02</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Графики Суперсилы</h3>
+                                <p class="text-slate-600">Наглядная паутина навыков. Где он "Тигр" (сила), а где
+                                    "Стратег" (ум).</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                <span class="font-bold text-lg">03</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Алгоритм действий</h3>
+                                <p class="text-slate-600">Чек-лист на завтра: купить ракетку, найти тренера-женщину
+                                    (мягкий подход), изменить диету.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phone Mockup -->
+                    <div class="lg:w-1/2 relative perspective-1000">
+                        <div
+                            class="relative mx-auto border-slate-900 bg-slate-900 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl transform rotate-y-12 hover:rotate-0 transition duration-500">
+                            <div class="h-[32px] w-[3px] bg-slate-800 absolute -start-[17px] top-[72px] rounded-s-lg">
+                            </div>
+                            <div class="h-[46px] w-[3px] bg-slate-800 absolute -start-[17px] top-[124px] rounded-s-lg">
+                            </div>
+                            <div class="h-[46px] w-[3px] bg-slate-800 absolute -start-[17px] top-[178px] rounded-s-lg">
+                            </div>
+                            <div class="h-[64px] w-[3px] bg-slate-800 absolute -end-[17px] top-[142px] rounded-e-lg">
+                            </div>
+                            <div class="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-slate-800">
+                                <!-- Mockup Screen Content -->
+                                <div class="bg-blue-600 h-24 p-6 text-white text-center pt-10">
+                                    <div class="text-sm opacity-80">Анализ завершен</div>
+                                    <div class="text-2xl font-bold">Александр, 7 лет</div>
+                                </div>
+                                <div class="p-4 space-y-4">
+                                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                                        <div class="text-xs text-green-600 font-bold uppercase mb-1">Рекомендация #1
+                                        </div>
+                                        <div class="text-lg font-bold text-slate-800 flex items-center justify-between">
+                                            Большой Теннис <i class="fa-solid fa-check-circle text-green-500"></i>
+                                        </div>
+                                        <div class="mt-2 text-xs text-slate-500">Совместимость: 96%</div>
+                                        <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1">
+                                            <div class="bg-green-500 h-1.5 rounded-full" style="width: 96%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div class="bg-slate-50 p-3 rounded-xl border">
+                                            <div class="text-xs text-slate-400">Тип мышц</div>
+                                            <div class="font-bold text-sm text-slate-700">Спринтер</div>
+                                        </div>
+                                        <div class="bg-slate-50 p-3 rounded-xl border">
+                                            <div class="text-xs text-slate-400">Психика</div>
+                                            <div class="font-bold text-sm text-slate-700">Азартный</div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
+                                            <div class="font-bold text-slate-800 text-sm">Зона Риска</div>
+                                        </div>
+                                        <p class="text-xs text-slate-600">Избегать монотонных нагрузок (плавание, лыжи).
+                                            Высокий риск потери мотивации через 3 недели.</p>
+                                    </div>
+                                    <button
+                                        class="w-full bg-slate-900 text-white py-3 rounded-xl text-sm font-bold">Скачать
+                                        PDF</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Floating Badge -->
+                        <div class="absolute top-20 -right-4 bg-white p-4 rounded-xl shadow-xl animate-bounce">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <span class="text-xs font-bold text-slate-700">Анализ готов</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Outcomes: 4 Cheat Codes -->
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">4 Чит-кода к вашему ребенку</h2>
+                    <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+                        Забудьте слово "отчет". Вы получите ключи управления, которые работают.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Card 1 -->
+                    <div
+                        class="bg-slate-50 rounded-2xl p-6 hover:bg-white hover:shadow-xl transition duration-300 border border-slate-100 group">
+                        <div
+                            class="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-apple-whole"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Режим и Питание</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            Научная инструкция по "заправке". Чем кормить перед стартом, а чем — для роста мышц.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div
+                        class="bg-slate-50 rounded-2xl p-6 hover:bg-white hover:shadow-xl transition duration-300 border border-slate-100 group">
+                        <div
+                            class="w-14 h-14 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Кнопка "Мотивация"</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            Как заставить его хотеть побеждать? Кого-то надо хвалить, а кому-то бросить вызов "на
+                            слабо".
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div
+                        class="bg-slate-50 rounded-2xl p-6 hover:bg-white hover:shadow-xl transition duration-300 border border-slate-100 group">
+                        <div
+                            class="w-14 h-14 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-bomb"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Карта Минного Поля</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            Узнайте, где его ждет травма или выгорание, за 2 года до того, как это случится.
+                        </p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div
+                        class="bg-slate-50 rounded-2xl p-6 hover:bg-white hover:shadow-xl transition duration-300 border border-slate-100 group">
+                        <div
+                            class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">CEO или Творец?</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            Спорт — это демо-версия взрослой жизни. Поймите его роль в социуме уже сейчас.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof: Audio Reviews -->
+        <section class="py-20 bg-slate-900 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-16 items-start">
+
+                    <!-- Reviews -->
+                    <div>
+                        <h2 class="text-3xl font-bold mb-8">Истории "из голосовых"</h2>
+                        <div class="space-y-6">
+                            <!-- Audio Review 1 -->
+                            <div
+                                class="bg-slate-800 p-4 rounded-2xl border border-slate-700 flex items-center gap-4 hover:border-blue-500 transition cursor-pointer group">
+                                <div
+                                    class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-play text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div class="font-bold text-sm">Елена (Мама Матвея)</div>
+                                        <div class="text-xs text-slate-400">0:42</div>
+                                    </div>
+                                    <div class="h-8 bg-slate-700 rounded-full overflow-hidden relative">
+                                        <div class="absolute inset-y-0 left-0 bg-blue-500/30 w-1/3"></div>
+                                        <div class="flex items-center justify-center h-full gap-0.5 opacity-50">
+                                            <div class="w-1 h-3 bg-white rounded-full"></div>
+                                            <div class="w-1 h-5 bg-white rounded-full"></div>
+                                            <div class="w-1 h-2 bg-white rounded-full"></div>
+                                            <div class="w-1 h-4 bg-white rounded-full"></div>
+                                            <div class="w-1 h-3 bg-white rounded-full"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-slate-400 mt-2 italic">"...мы перепробовали все, а оказалось
+                                        надо было просто..."</p>
+                                </div>
+                            </div>
+
+                            <!-- Audio Review 2 -->
+                            <div
+                                class="bg-slate-800 p-4 rounded-2xl border border-slate-700 flex items-center gap-4 hover:border-purple-500 transition cursor-pointer group">
+                                <div
+                                    class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-play text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div class="font-bold text-sm">Алексей (Папа Алисы)</div>
+                                        <div class="text-xs text-slate-400">1:15</div>
+                                    </div>
+                                    <div class="h-8 bg-slate-700 rounded-full overflow-hidden relative">
+                                        <div class="absolute inset-y-0 left-0 bg-purple-500/30 w-1/4"></div>
+                                        <div class="flex items-center justify-center h-full gap-0.5 opacity-50">
+                                            <div class="w-1 h-2 bg-white rounded-full"></div>
+                                            <div class="w-1 h-4 bg-white rounded-full"></div>
+                                            <div class="w-1 h-6 bg-white rounded-full"></div>
+                                            <div class="w-1 h-3 bg-white rounded-full"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-slate-400 mt-2 italic">"...тренер был в шоке, откуда мы
+                                        узнали про волокна..."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Founder Story -->
+                    <div class="relative">
+                        <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl relative overflow-hidden">
+                            <i
+                                class="fa-solid fa-quote-right absolute top-6 right-6 text-slate-700 text-6xl opacity-50"></i>
+                            <h3 class="text-2xl font-bold mb-4">Почему мы это создали?</h3>
+                            <p class="text-slate-300 leading-relaxed mb-6">
+                                "В детстве меня отдали на борьбу, хотя я был худ и высок. Я потерял 5 лет, думая, что я
+                                'слабак'. Оказалось, я был рожден для плавания. <br><br>
+                                Я создал этот алгоритм, чтобы ни один ребенок больше не чувствовал себя неудачником
+                                просто потому, что находится не в своей тарелке."
+                            </p>
+                            <div class="flex items-center gap-4 border-t border-slate-700 pt-6">
+                                <div class="w-12 h-12 bg-slate-700 rounded-full overflow-hidden">
+                                    <div class="w-full h-full flex items-center justify-center text-slate-400"><i
+                                            class="fa-solid fa-user"></i></div>
+                                </div>
+                                <div>
+                                    <div class="font-bold">Влад</div>
+                                    <div class="text-xs text-slate-400 uppercase tracking-wider">Основатель Navigator
+                                        Talantov</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-20 bg-blue-600 text-white text-center relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+            </div>
+            <div class="relative z-10 max-w-4xl mx-auto px-4">
+                <div
+                    class="inline-block bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-sm font-bold mb-6 border border-white/30">
+                    🔥 Бета-версия: Бесплатный доступ
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6">Хватит гадать на кофейной гуще.</h2>
+                <p class="mb-10 text-xl text-blue-100 opacity-90 leading-relaxed">
+                    Будущее вашего ребенка уже написано в его нейродинамике. <br>Вам осталось только прочитать эту
+                    инструкцию.
+                </p>
+                <div class="flex flex-col items-center gap-4">
+                    <button onclick="scrollToApp()"
+                        class="bg-white text-blue-600 px-12 py-5 rounded-2xl font-bold text-xl shadow-2xl hover:bg-slate-50 transition transform hover:-translate-y-1 flex items-center gap-3 mx-auto">
+                        <i class="fa-solid fa-unlock-keyhole"></i> Получить Разбор (0 ₽)
+                    </button>
+                    <div class="text-sm opacity-70 line-through">Вместо 5 000 ₽</div>
+                </div>
+                <div class="mt-6 text-sm text-blue-200">
+                    <i class="fa-solid fa-lock"></i> Ваши данные анонимны и защищены шифрованием.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- APP CONTAINER (Initially Hidden) -->
+    <div id="app-container" class="fixed inset-0 bg-slate-50 z-[60] hidden overflow-y-auto">
+
+        <!-- App Header -->
+        <div class="bg-white border-b border-slate-200 sticky top-0 z-10 px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-700">Сканер Талантов</span>
+                <span class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full" id="step-indicator">Шаг
+                    1/4</span>
+            </div>
+            <button onclick="closeApp()" class="text-slate-400 hover:text-red-500">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <div class="min-h-screen flex flex-col justify-center items-center p-4">
+
+            <!-- STEP 1: Basic Info -->
+            <div id="step-1" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 step-content">
+                <h3 class="text-2xl font-bold mb-2">Кто наш герой?</h3>
+                <p class="text-slate-500 mb-6">Базовые данные для калибровки системы.</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Имя ребенка</label>
+                        <input type="text" id="childName" placeholder="Например, Александр"
+                            class="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Возраст</label>
+                        <select id="childAge" class="w-full p-3 border border-slate-200 rounded-lg bg-white">
+                            <option value="4-6">4-6 лет</option>
+                            <option value="7-10">7-10 лет</option>
+                            <option value="11-14">11-14 лет</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Пол</label>
+                        <div class="flex gap-4">
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="gender" value="boy" class="peer hidden" checked>
+                                <div
+                                    class="p-3 text-center border rounded-lg peer-checked:bg-blue-50 peer-checked:border-blue-500 peer-checked:text-blue-700 transition">
+                                    Мальчик
+                                </div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="gender" value="girl" class="peer hidden">
+                                <div
+                                    class="p-3 text-center border rounded-lg peer-checked:bg-pink-50 peer-checked:border-pink-500 peer-checked:text-pink-700 transition">
+                                    Девочка
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="nextStep(2)"
+                    class="w-full mt-8 bg-slate-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition">
+                    Далее <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+
+            <!-- STEP 2: Physiology & Energy -->
+            <div id="step-2" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 step-content hidden">
+                <h3 class="text-2xl font-bold mb-2">Энергия и Тело</h3>
+                <p class="text-slate-500 mb-6">Оцените активность ребенка.</p>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-3">Уровень энергии к вечеру</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="selectOption('energy', 'high', this)"
+                                class="option-btn p-4 border rounded-xl text-left hover:border-blue-400 transition group">
+                                <div
+                                    class="w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </div>
+                                <div class="font-semibold text-sm">Ураган</div>
+                                <div class="text-xs text-slate-500 mt-1">Бегает по потолку, трудно уложить спать.</div>
+                            </button>
+                            <button onclick="selectOption('energy', 'low', this)"
+                                class="option-btn p-4 border rounded-xl text-left hover:border-blue-400 transition group">
+                                <div
+                                    class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-battery-half"></i>
+                                </div>
+                                <div class="font-semibold text-sm">Спокойный</div>
+                                <div class="text-xs text-slate-500 mt-1">Любит лего, рисование, быстро устает от шума.
+                                </div>
+                            </button>
+                        </div>
+                        <input type="hidden" id="energyInput">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-3">Координация</label>
+                        <input type="range" min="1" max="10" value="5" id="coordRange"
+                            class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-slate-400 mt-1">
+                            <span>Спотыкается</span>
+                            <span>Ловит мух на лету</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-8">
+                    <button onclick="nextStep(1)"
+                        class="flex-1 py-3 text-slate-500 font-medium hover:bg-slate-50 rounded-lg">Назад</button>
+                    <button onclick="nextStep(3)"
+                        class="flex-2 w-2/3 bg-slate-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition">Далее</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Psychology -->
+            <div id="step-3" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 step-content hidden">
+                <h3 class="text-2xl font-bold mb-2">Психотип</h3>
+                <p class="text-slate-500 mb-6">Как он взаимодействует с миром?</p>
+
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium text-slate-700">Социальный фактор</label>
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="selectOption('social', 'team', this)"
+                            class="option-btn p-3 border rounded-lg flex items-center gap-4 hover:border-blue-400 transition">
+                            <div
+                                class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded flex items-center justify-center">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-semibold text-sm">Командный игрок</div>
+                                <div class="text-xs text-slate-500">Заряжается от общения</div>
+                            </div>
+                        </button>
+                        <button onclick="selectOption('social', 'solo', this)"
+                            class="option-btn p-3 border rounded-lg flex items-center gap-4 hover:border-blue-400 transition">
+                            <div
+                                class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded flex items-center justify-center">
+                                <i class="fa-solid fa-chess-knight"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-semibold text-sm">Одиночный волк</div>
+                                <div class="text-xs text-slate-500">Важна личная ответственность</div>
+                            </div>
+                        </button>
+                    </div>
+                    <input type="hidden" id="socialInput">
+
+                    <label class="block text-sm font-medium text-slate-700 mt-4">Реакция на поражение</label>
+                    <select id="stressResponse" class="w-full p-3 border border-slate-200 rounded-lg bg-white">
+                        <option value="anger">Злится и хочет реванш</option>
+                        <option value="cry">Плачет и замыкается</option>
+                        <option value="ignore">Быстро забывает</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-3 mt-8">
+                    <button onclick="nextStep(2)"
+                        class="flex-1 py-3 text-slate-500 font-medium hover:bg-slate-50 rounded-lg">Назад</button>
+                    <button onclick="nextStep(4)"
+                        class="flex-2 w-2/3 bg-slate-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition">Далее</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Photo & Submit -->
+            <div id="step-4" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 step-content hidden">
+                <h3 class="text-2xl font-bold mb-2">Последний штрих</h3>
+                <p class="text-slate-500 mb-6">Загрузите фото для генерации Hero Card.</p>
+
+                <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition cursor-pointer relative"
+                    onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" class="hidden" onchange="handleFile(this)">
+                    <div id="uploadPlaceholder">
+                        <div
+                            class="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-camera text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-medium text-slate-700">Нажмите, чтобы загрузить фото</p>
+                        <p class="text-xs text-slate-400 mt-1">Или перетащите сюда</p>
+                    </div>
+                    <div id="uploadPreview" class="hidden">
+                        <img id="previewImg" class="w-32 h-32 object-cover rounded-full mx-auto shadow-lg mb-2" src="">
+                        <p class="text-green-600 text-sm font-bold"><i class="fa-solid fa-check"></i> Фото загружено</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-400 text-center mt-4">Мы не храним фото. Они обрабатываются в браузере.</p>
+
+                <div class="flex gap-3 mt-8">
+                    <button onclick="nextStep(3)"
+                        class="flex-1 py-3 text-slate-500 font-medium hover:bg-slate-50 rounded-lg">Назад</button>
+                    <button onclick="startAnalysis()"
+                        class="flex-2 w-2/3 bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-yellow-300"></i> Gemini Анализ
+                    </button>
+                </div>
+            </div>
+
+            <!-- LOADING SCREEN -->
+            <div id="loading-screen" class="w-full max-w-md text-center hidden">
+                <div class="relative w-24 h-24 mx-auto mb-8">
+                    <div class="absolute inset-0 border-4 border-slate-200 rounded-full"></div>
+                    <div
+                        class="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin">
+                    </div>
+                    <i
+                        class="fa-solid fa-brain absolute inset-0 flex items-center justify-center text-slate-300 text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">Gemini генерирует будущее...</h3>
+                <p class="text-slate-500 mb-6 h-6" id="loading-text">Инициализация LLM...</p>
+
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                    <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"
+                        id="progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- RESULTS SCREEN -->
+            <div id="results-screen" class="w-full max-w-2xl hidden pb-20">
+
+                <!-- Hero Card Section -->
+                <div
+                    class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-8 transform transition hover:scale-[1.01] duration-500">
+                    <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-1">
+                        <div class="bg-slate-900 rounded-t-[22px] relative h-64 w-full overflow-hidden group">
+                            <!-- Simulated GenAI Image -->
+                            <img src="" id="sport-bg"
+                                class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-110 transition duration-1000">
+
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent">
+                            </div>
+
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <div class="flex items-end justify-between">
+                                    <div>
+                                        <span
+                                            class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded mb-2 inline-block shadow-lg border border-blue-400">✨
+                                            Gemini Choice</span>
+                                        <h2 class="text-3xl font-bold text-white mb-1" id="res-sport-name">...</h2>
+                                        <p class="text-slate-300 text-sm" id="res-child-name">...</p>
+                                    </div>
+                                    <div
+                                        class="w-16 h-16 rounded-full border-2 border-white/30 overflow-hidden bg-slate-700">
+                                        <img id="res-avatar" src="" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="font-bold text-lg mb-3 flex items-center gap-2"><i
+                                class="fa-solid fa-user-check text-blue-500"></i> Вердикт AI-эксперта</h3>
+                        <p class="text-slate-600 leading-relaxed mb-6" id="res-reason">
+                            ...
+                        </p>
+
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-6">
+                            <h4 class="font-bold text-sm text-blue-800 mb-2"><i class="fa-solid fa-award"></i> Видение
+                                будущего</h4>
+                            <p class="text-sm text-blue-700 italic" id="res-hero-story">...</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-6 text-center">
+                            <div>
+                                <div class="text-lg font-bold text-emerald-500" id="res-phys-trait">...</div>
+                                <div class="text-xs text-slate-400 uppercase">Суперсила (Тело)</div>
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold text-purple-500" id="res-psych-trait">...</div>
+                                <div class="text-xs text-slate-400 uppercase">Суперсила (Ум)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Info Grid -->
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <!-- Blacklist -->
+                    <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-red-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fa-solid fa-ban text-red-500 text-xl"></i>
+                            <h3 class="font-bold text-slate-800">Зона риска</h3>
+                        </div>
+                        <ul class="space-y-3" id="blacklist">
+                            <!-- Dynamic Content -->
+                        </ul>
+                    </div>
+
+                    <!-- Next Steps -->
+                    <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-lg">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fa-solid fa-check-circle text-green-400 text-xl"></i>
+                            <h3 class="font-bold">План действий</h3>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-4">Мы подобрали лучшие школы на основе геолокации и рейтинга
+                            тренеров.</p>
+                        <button
+                            class="w-full bg-white text-slate-900 py-2 rounded-lg text-sm font-bold hover:bg-slate-200 transition">
+                            Найти секцию рядом
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ✨ AI CHAT EXPERT SECTION ✨ -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 border border-slate-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800">AI-Спортивный Врач</h3>
+                                <p class="text-xs text-slate-500">Задайте вопрос по результатам</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="chat-history" class="space-y-4 mb-4 max-h-60 overflow-y-auto hidden">
+                        <!-- Chat messages will appear here -->
+                    </div>
+
+                    <div class="relative">
+                        <input type="text" id="chatInput" placeholder="Например: А это дорогой спорт?"
+                            class="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <button onclick="askAICoach()"
+                            class="absolute right-2 top-2 w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition">
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="flex gap-2 mt-3 overflow-x-auto pb-2">
+                        <button onclick="fillChat('Дорого ли заниматься?')"
+                            class="whitespace-nowrap px-3 py-1 bg-slate-100 text-slate-600 text-xs rounded-full hover:bg-slate-200 transition">💰
+                            Дорого ли это?</button>
+                        <button onclick="fillChat('Как мотивировать ребенка?')"
+                            class="whitespace-nowrap px-3 py-1 bg-slate-100 text-slate-600 text-xs rounded-full hover:bg-slate-200 transition">🚀
+                            Как мотивировать?</button>
+                        <button onclick="fillChat('Какие травмы возможны?')"
+                            class="whitespace-nowrap px-3 py-1 bg-slate-100 text-slate-600 text-xs rounded-full hover:bg-slate-200 transition">🚑
+                            Риски травм</button>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="location.reload()"
+                        class="text-slate-400 text-sm hover:text-slate-600 underline">Начать заново</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const apiKey = ""; // API Key injected by environment
+
+        // --- CALCULATOR LOGIC ---
+        const costRange = document.getElementById('costRange');
+        const yearsRange = document.getElementById('yearsRange');
+        const equipRange = document.getElementById('equipRange');
+
+        function updateCalculator() {
+            const monthlyCost = parseInt(costRange.value);
+            const years = parseInt(yearsRange.value);
+            const equipCost = parseInt(equipRange.value);
+
+            document.getElementById('costValue').innerText = monthlyCost.toLocaleString() + ' ₽';
+            document.getElementById('yearsValue').innerText = years + (years === 1 ? ' год' : (years < 5 ? ' года' : ' лет'));
+            document.getElementById('equipValue').innerText = equipCost.toLocaleString() + ' ₽';
+
+            // Calculation: (Monthly * 12 * Years) + (Equip * Years)
+            const total = (monthlyCost * 12 * years) + (equipCost * years);
+
+            // Animate number
+            document.getElementById('totalLoss').innerText = total.toLocaleString() + ' ₽';
+        }
+
+        [costRange, yearsRange, equipRange].forEach(el => el.addEventListener('input', updateCalculator));
+        updateCalculator(); // Init
+
+    </script>
+    <script src="js/quiz_widget.js"></script>
+</body>
+
+</html>
